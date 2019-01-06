@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HorsePower Calculator{% endblock %}
+
+{% block body %}
+	<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Specs Name</th>
+					<th>Engine Specs</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Manufacturer</td>
+					<td>{{ engine.manufacturer }}</td>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td>{{ engine.name }}</td>
+				</tr>
+				<tr>
+					<td>Production</td>
+					<td>{{ engine.production }}</td>
+				</tr>
+				<tr>
+					<td>Engineblock Alloy</td>
+					<td>{{ engine.getBlockAlloy() }}</td>
+				</tr>
+				<tr>
+					<td>Configuration</td>
+					<td>{{ engine.configuration }}</td>
+				</tr>
+				<tr>
+					<td>Vavlvetrain</td>
+					<td>{{ engine.vavlvetrain }}</td>
+				</tr>
+				<tr>
+					<td>Displacement</td>
+					<td>{{ engine.displacement }}</td>
+				</tr>
+				<tr>
+					<td>HorsePower(at rpm)</td>
+					<td>{{ engine.hp }}hp at {{ engine.getMaxHpAtRpm() }}RPM</td>
+				</tr>
+				<tr>
+					<td>Torque(at rpm)</td>
+					<td>{{ engine.torque }}Nm at {{ engine.getMaxTorqueAtRpm() }}RPM</td>
+				</tr>
+				<tr>
+					<td>Redline</td>
+					<td>{{ engine.redline }}RPM</td>
+				</tr>
+				<tr>
+					<td>Avereage Lifespan of the engine(in km)</td>
+					<td>{{ engine.lifespan }}km</td>
+				</tr>
+			</tbody>
+		</table>
+{% endblock %}
