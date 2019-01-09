@@ -44,10 +44,10 @@ class EngineStock
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $vavlvetrain;
+    private $valvetrain;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     private $displacement;
 
@@ -151,24 +151,24 @@ class EngineStock
         return $this;
     }
 
-    public function getVavlvetrain(): ?string
+    public function getValvetrain(): ?string
     {
-        return $this->vavlvetrain;
+        return $this->valvetrain;
     }
 
-    public function setVavlvetrain(string $vavlvetrain): self
+    public function setValvetrain(string $valvetrain): self
     {
-        $this->vavlvetrain = $vavlvetrain;
+        $this->valvetrain = $valvetrain;
 
         return $this;
     }
 
-    public function getDisplacement(): ?string
+    public function getDisplacement(): ?int
     {
         return $this->displacement;
     }
 
-    public function setDisplacement(string $displacement): self
+    public function setDisplacement(int $displacement): self
     {
         $this->displacement = $displacement;
 

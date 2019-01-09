@@ -7,9 +7,14 @@
 	use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 	use Doctrine\ORM\Tools\Setup;
 	use Doctrine\ORM\EntityManager;
+	use Symfony\Component\Form\Extension\Core\Type\TextType;
+	use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+	use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+	use Symfony\Component\Form\Extension\Core\Type\SubmitType;
     
 	use App\Entity\EngineStock;
-
+use Symfony\Component\HttpFoundation\Request;
+    
 
 	class HPCalcController extends Controller{
 
@@ -32,7 +37,50 @@
 		}
 		
 		/**
+		 * @Route("/stock/engine/add", name="new_engine") 
+		 * @Method({"GET", "POST"})
+		 */
+		public function new_engine(Request $request){
+		    $engine = new EngineStock();
+		    
+		    $form = $this->createFormBuilder($engine)
+		    ->add('manufacturer', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('name', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('production', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('block_alloy', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('configuration', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('valvetrain', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('displacement', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('hp', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('max_hp_at_rpm', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('torque', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('max_torque_at_rpm', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('redline', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('lifespan', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+		    ->add('save', SubmitType::class, array('label' => 'Add Engine', 'attr' => array('class' => 'btn btn-primary')))
+		    ->getForm();
+		    
+		    $form->handleRequest($request);
+		    
+		    if($form->isSubmitted() && $form->isValid()){
+		        $engine = $form->getData();
+		        $set_max_hp = $engine->getHp() / 3;
+		        $set_max_hp += $engine->getHp();
+		        $engine->setMaxHpStock($set_max_hp);
+		        
+		        $entityManager = $this->getDoctrine()->getManager();
+		        $entityManager->persist($engine);
+		        $entityManager->flush();
+		        
+		        return $this->redirectToRoute('/engine/'.$engine->getId());
+		    }
+		    
+		    return $this->render('pages/engine_new.html.twig', array('form' => $form->createView()));
+		}
+		
+		/**
 		 * @Route("/engine/{id}", name="engine_show")
+		 * @Method({"GET", "POST"})
 		 */
 		public function show($id){
 		    $engine= $this->getDoctrine()->getRepository(EngineStock::class)->find($id);
@@ -50,7 +98,7 @@
 		    $twojz->setBlockAlloy("Cast Iron");
 		    $twojz->setConfiguration("Straight-6");
 		    $twojz->setVavlvetrain("DOHC - 4 valves per cylinder");
-		    $twojz->setDisplacement("2997cc(3.0L)");
+		    $twojz->setDisplacement(2997);
 		    $twojz->setHp(325);
 		    $twojz->setMaxHpAtRpm(5600);
 		    $twojz->setTorque(440);

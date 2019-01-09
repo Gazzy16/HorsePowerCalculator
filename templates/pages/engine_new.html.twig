@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HorsePower Calculator{% endblock %}
+
+{% block body %}
+    {% block form_row %}
+        {% spaceless %}
+        	<div class="form-group row">
+                <div class="col-sm-5">
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        {% endspaceless %}
+    {% endblock form_row %}
+{% endblock  %}
