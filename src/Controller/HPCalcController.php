@@ -11,6 +11,7 @@
 	use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 	use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 	use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+	use Symfony\Component\Form\Forms;
     
 	use App\Entity\EngineStock;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +58,7 @@ use Symfony\Component\HttpFoundation\Request;
 		    ->add('max_torque_at_rpm', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
 		    ->add('redline', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
 		    ->add('lifespan', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-		    ->add('save', SubmitType::class, array('label' => 'Add Engine', 'attr' => array('class' => 'btn btn-primary')))
+		    ->add('save', SubmitType::class, array('label' => 'Add Engine', 'attr' => array('class' => 'btn btn-secondary')))
 		    ->getForm();
 		    
 		    $form->handleRequest($request);
@@ -72,7 +73,7 @@ use Symfony\Component\HttpFoundation\Request;
 		        $entityManager->persist($engine);
 		        $entityManager->flush();
 		        
-		        return $this->redirectToRoute('/engine/'.$engine->getId());
+		        return $this->redirectToRoute('engine_show', array('id' => $engine->getId()));
 		    }
 		    
 		    return $this->render('pages/engine_new.html.twig', array('form' => $form->createView()));
