@@ -8,7 +8,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190110193418 extends AbstractMigration
+final class Version20190221181906 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
@@ -16,6 +16,8 @@ final class Version20190110193418 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE engine_stock (id INT AUTO_INCREMENT NOT NULL, manufacturer VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, production VARCHAR(255) NOT NULL, block_alloy VARCHAR(255) NOT NULL, configuration VARCHAR(255) NOT NULL, valvetrain VARCHAR(255) NOT NULL, displacement INT NOT NULL, hp INT NOT NULL, max_hp_at_rpm INT NOT NULL, torque INT NOT NULL, max_torque_at_rpm INT NOT NULL, redline INT NOT NULL, lifespan INT NOT NULL, max_hp_stock INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE engine_tuned (id INT AUTO_INCREMENT NOT NULL, manufacturer VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, production VARCHAR(255) NOT NULL, block_alloy VARCHAR(255) NOT NULL, configuration VARCHAR(255) NOT NULL, valvetrain VARCHAR(255) NOT NULL, displacement INT NOT NULL, hp INT NOT NULL, max_hp_at_rpm INT NOT NULL, torque INT NOT NULL, max_torque_at_rpm INT NOT NULL, redline INT NOT NULL, lifespan INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, isadmin TINYINT(1) DEFAULT NULL, isdeleted TINYINT(1) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
     }
 
     public function down(Schema $schema) : void
@@ -24,5 +26,7 @@ final class Version20190110193418 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DROP TABLE engine_stock');
+        $this->addSql('DROP TABLE engine_tuned');
+        $this->addSql('DROP TABLE user');
     }
 }

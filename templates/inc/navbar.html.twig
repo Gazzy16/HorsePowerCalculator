@@ -14,7 +14,21 @@
 					<a href="/stock/engine/add" class="nav-link">Add Engine</a>
 				</li>
 				<li class="nav-item">
-					<a href="/login" class="nav-link">Login</a>
+                    {% if app.session.has('id') == false %}
+                        <a href="/register" class="nav-link">Register</a>
+                        </li>
+                        <li>
+                        <a href="/login" class="nav-link">Login</a>
+                    {% else %}
+                    	</li>
+                        <li>
+                        <a href="/BoardFind/Logout" class="nav-link">Logout</a>
+                        {% if getIsAdmin(app.session.get('id')) == true %}
+                        	</li>
+                        	<li>
+                        	<a href="/admin" class="nav-link">Control Panel</a>
+                        {% endif %}
+                    {% endif %}
 				</li>
 			</ul>
 		</div>

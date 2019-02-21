@@ -3,17 +3,14 @@
 {% block title %}HorsePower Calculator{% endblock %}
 
 {% block body %}
-    {% block form_row %}
-        {% spaceless %}
-        	<div class="form-group row">
-                <div class="col-sm-5">
-                    {{ form_start(form) }}
-                    {{ form_errors(form) }}
-                    {{ form_widget(form) }}
-                    {{ form_end(form) }}
-                    <a href="/stock/engines/default" class="btn btn-light">Default</a>
-                </div>
-            </div>
-        {% endspaceless %}
-    {% endblock form_row %}
-{% endblock  %}
+	<div class="form-group row">
+    	<div class="col-sm-5">
+    		{% include('inc/form.html.twig') %}
+    	    {% if app.session.has('id') %}
+                {% if getIsAdmin(app.session.get('id')) %}
+                	<a href="/stock/engine/default" class="btn btn-light">Default</a>
+                {% endif %}
+    	    {% endif %}
+	    </div>
+	</div>
+{% endblock %}
