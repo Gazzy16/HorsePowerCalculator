@@ -30,13 +30,14 @@
                 $entityManager->persist($user);
                 $entityManager->flush();
                 $flashbag = $this->get('session')->getFlashBag();
-                $flashbag->add("SuccessfullRegister", "You successfully registered in our site!");
+                $flashbag->add("SuccessfullRegistration", "Your registration was successfull!");
                 return $this->redirectToRoute('engine_list_home');
             }
             return $this->render('pages/register_form.html.twig', array(
                 'form' => $form->createView(),
             ));
         }
+        
         /**
          * @Route("/logout", name="logout")
          */
@@ -44,7 +45,7 @@
         {
             $this->get('session')->clear();
             $flashbag = $this->get('session')->getFlashBag();
-            $flashbag->add("SuccessfullLoggout", "You successfully logout from our site!");
+            $flashbag->add("SuccessfullLoggout", "You're successfully logged out!");
             return $this->redirectToRoute('engine_list_home');
         }
         /**
@@ -63,15 +64,15 @@
                 ->findOneByUsernamePassword($guestUser->getUsername(), $guestUser->getPassword());
                 if (!$user) {
                     throw $this->createNotFoundException(
-                        'No product found for this email and password '
+                        'No User found with this email and password!'
                         );
                 }
                 $this->get('session')->set('id', $user->getId());
                 $flashbag = $this->get('session')->getFlashBag();
-                $flashbag->add("SuccessfullLogin", "You successfully logged in our site!");
-                return $this->redirectToRoute('BoardFind');
+                $flashbag->add("SuccessfullLogin", "You're successfully logged in!");
+                return $this->redirectToRoute('engine_list_home');
             }
-            return $this->render('home/LoginForm.html.twig', array(
+            return $this->render('pages/login_form.html.twig', array(
                 'form' => $form->createView(),
             ));
         }

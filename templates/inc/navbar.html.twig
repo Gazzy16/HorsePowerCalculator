@@ -22,11 +22,11 @@
                     {% else %}
                     	</li>
                         <li>
-                        <a href="/BoardFind/Logout" class="nav-link">Logout</a>
+                        <a href="/logout" class="nav-link">Logout</a>
                         {% if getIsAdmin(app.session.get('id')) == true %}
                         	</li>
                         	<li>
-                        	<a href="/admin" class="nav-link">Control Panel</a>
+                        	<a href="/control/panel" class="nav-link">Control Panel</a>
                         {% endif %}
                     {% endif %}
 				</li>

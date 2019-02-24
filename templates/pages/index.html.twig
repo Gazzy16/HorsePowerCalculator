@@ -7,7 +7,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Engine ID</th>
+					<th>Engine Manufacturer</th>
 					<th>Engine Name</th>
 					<th>Actions</th>
 				</tr>
@@ -15,7 +15,7 @@
 			<tbody>
 				{% for engine in engines %}
 					<tr>
-						<td>{{ engine.id }}</td>
+						<td>{{ engine.manufacturer }}</td>
 						<td>{{ engine.name }}</td>
 						<td>
 							<a href="/engine/{{ engine.id }}" class="btn btn-dark">Show</a>

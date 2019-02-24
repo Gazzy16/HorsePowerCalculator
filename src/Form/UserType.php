@@ -10,11 +10,11 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', TextType::class , array('label' => '*Username:  ' ,'attr' => array('class' => 'input2')))
-                ->add('password', PasswordType::class, array('label' => '*Password:  ' ,'attr' => array('class' => 'input2')))
-                ->add('email', TextType::class, array('label' => '*Email:  ' ,'attr' => array('class' => 'input2')))
-                ->add('firstname', TextType::class , array('label' => '*Name:  ' ,'attr' => array('class' => 'input2')))
-                ->add('lastname', TextType::class , array('label' => '*Last Name:  ' ,'attr' => array('class' => 'input2')))
-                ->add('register', SubmitType::class, array('label' => 'Register','attr' => array('class' => 'create button1')));
+        $builder->add('username', TextType::class , array('attr' => array('class' => 'form-control form-control-sm')))
+        ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+        ->add('email', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+        ->add('firstname', TextType::class , array('attr' => array('class' => 'form-control form-control-sm')))
+        ->add('lastname', TextType::class , array('attr' => array('class' => 'form-control form-control-sm')))
+        ->add('register', SubmitType::class, array('label' => 'Register', 'attr' => array('class' => 'btn btn-secondary')));
     }
 }

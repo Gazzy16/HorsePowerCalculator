@@ -3,6 +3,11 @@
 {% block title %}HorsePower Calculator{% endblock %}
 
 {% block body %}
+	{% if app.session.has('id') == false %}
+	<div class="alert alert-warning">
+		<strong>Warning!</strong> You need to LOG INTO your account in order to use this function!
+	</div>
+    {% endif %}
 	<div class="form-group row">
     	<div class="col-sm-5">
     		{% include('inc/form.html.twig') %}
@@ -10,7 +15,9 @@
                 {% if getIsAdmin(app.session.get('id')) %}
                 	<a href="/stock/engine/default" class="btn btn-light">Default</a>
                 {% endif %}
-    	    {% endif %}
+            {% else %}
+            	<a href="/register" class="btn btn-light">Register</a>
+            {% endif %}
 	    </div>
 	</div>
 {% endblock %}

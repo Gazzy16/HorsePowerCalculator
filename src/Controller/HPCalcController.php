@@ -14,6 +14,7 @@
 	use Symfony\Component\Form\Forms;
 	use App\Entity\EngineStock;
 	use App\Entity\User;
+    use App\Form\UserLoginType;
 	use App\Form\UserType;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,12 +28,6 @@
 		public function index(){
 			$engines= $this->getDoctrine()->getRepository(EngineStock::class)->findAll();
 			
-			if($engines){
-    			foreach ( $engines as $engine){
-    			    echo "engine with id:".$engine->getId();
-    			}
-			}
-			
 			return $this->render('pages/index.html.twig', array('engines' => $engines));
 		}
 		
@@ -41,22 +36,28 @@
 		 * @Method({"GET", "POST"})
 		 */
 		public function new_engine(Request $request){
-		    $session = $this->get('session');
-		    if($session->getId() == 0){
-		        $user = new User();
-		        $form = $this->createForm(UserType::class, $user);
-		        $form->handleRequest($request);
-		        if ($form->isSubmitted() && $form->isValid()) {
-		            $user = $form->getData();
-		            $entityManager = $this->getDoctrine()->getManager();
-		            $user->setPassword(hash("sha256",$user->getPassword()));
-		            $user->setIsadmin(false);
-		            $entityManager->persist($user);
-		            $entityManager->flush();
-		            $flashbag = $this->get('session')->getFlashBag();
-		            $flashbag->add("SuccessfullRegister", "You successfully registered in our site!");
-		            return $this->redirectToRoute('engine_list_home');
-		        }
+		    $id = $this->get('session')->get('id');
+		    
+		     if($id == NULL){
+		         $user = new User();
+		         $form = $this->createForm(UserLoginType::class, $user);
+		         $form->handleRequest($request);
+		         if ($form->isSubmitted()) {
+		             $guestUser = $form->getData();
+		             $guestUser->setPassword(hash("sha256",$guestUser->getPassword()));
+		             $user = $this->getDoctrine()
+		             ->getRepository(User::class)
+		             ->findOneByUsernamePassword($guestUser->getUsername(), $guestUser->getPassword());
+		             if (!$user) {
+		                 throw $this->createNotFoundException(
+		                     'No User found with this email and password!'
+		                     );
+		             }
+		             $this->get('session')->set('id', $user->getId());
+		             $flashbag = $this->get('session')->getFlashBag();
+		             $flashbag->add("SuccessfullLogin", "You're successfully logged in!");
+		             return $this->redirectToRoute('new_engine');
+		         }
 		    }else{
 		    
     		    $engine = new EngineStock();
@@ -94,7 +95,7 @@
     		    }
 		    }
 		    return $this->render('pages/engine_new.html.twig', array('form' => $form->createView()));
-		}
+		 }
 		
 		/**
 		 * @Route("/engine/{id}", name="engine_show")
@@ -106,5 +107,32 @@
 		    return $this->render('pages/show_engine.html.twig', array('engine' => $engine));
 		}
 		
+		/**
+		 * @Route("/stock/engine/default", name="default_engines")
+		 * @Method({"GET", "POST"})
+		 */
+		public function default(){
+		    
+		    $twojz = new EngineStock();
+		    $twojz->setManufacturer("Toyota");
+		    $twojz->setName("2jz");
+		    $twojz->setProduction("1991-2007");
+		    $twojz->setBlockAlloy("Cast Iron");
+		    $twojz->setConfiguration("Straight-6");
+		    $twojz->setValvetrain("DOHC - 4 valves per cylinder");
+		    $twojz->setDisplacement(2997);
+		    $twojz->setHp(325);
+		    $twojz->setMaxHpAtRpm(5600);
+		    $twojz->setTorque(440);
+		    $twojz->setMaxTorqueAtRpm(4800);
+		    $twojz->setRedline(6800);
+		    $twojz->setLifespan(400000);
+		    $twojz->setMaxHpStock(750);
 		
+		    $entityManager = $this->getDoctrine()->getManager();
+		    $entityManager->persist($twojz);
+		    $entityManager->flush();
+		    
+		    return $this->redirectToRoute('engine_show', array('id' => $twojz->getId()));
+		}
 	}
