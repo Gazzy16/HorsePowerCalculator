@@ -5,8 +5,8 @@
     use Symfony\Component\Routing\Annotation\Route;
     use App\Entity\User;
     use Symfony\Component\HttpFoundation\Request;
-    use App\Form\UserType;
-    use App\Form\UserLoginType;
+    use App\Form\RegisterFormType;
+    use App\Form\LoginFormType;
     use Symfony\Component\HttpFoundation\Session\Session;
     use Symfony\Component\HttpFoundation\Session\SessionInterface;
     
@@ -20,7 +20,7 @@
         public function register(Request $request)
         {
             $user = new User();
-            $form = $this->createForm(UserType::class, $user);
+            $form = $this->createForm(RegisterFormType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $user = $form->getData();
@@ -54,7 +54,7 @@
         public function login(Request $request)
         {
             $user = new User();
-            $form = $this->createForm(UserLoginType::class, $user);
+            $form = $this->createForm(LoginFormType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted()) {
                 $guestUser = $form->getData();

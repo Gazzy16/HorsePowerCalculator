@@ -14,8 +14,8 @@
 	use Symfony\Component\Form\Forms;
 	use App\Entity\EngineStock;
 	use App\Entity\User;
-    use App\Form\UserLoginType;
-	use App\Form\UserType;
+    use App\Form\LoginFormType;
+	use App\Form\RegisterFormType;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\RedirectResponse;
         
@@ -40,7 +40,7 @@
 		    
 		     if($id == NULL){
 		         $user = new User();
-		         $form = $this->createForm(UserLoginType::class, $user);
+		         $form = $this->createForm(LoginFormType::class, $user);
 		         $form->handleRequest($request);
 		         if ($form->isSubmitted()) {
 		             $guestUser = $form->getData();
