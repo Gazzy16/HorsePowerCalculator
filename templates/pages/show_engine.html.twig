@@ -20,40 +20,28 @@
 					<td>{{ engine.name }}</td>
 				</tr>
 				<tr>
-					<td>Production</td>
-					<td>{{ engine.production }}</td>
-				</tr>
-				<tr>
 					<td>Engineblock Alloy</td>
 					<td>{{ engine.getBlockAlloy() }}</td>
 				</tr>
 				<tr>
 					<td>Configuration</td>
-					<td>{{ engine.configuration }}</td>
-				</tr>
-				<tr>
-					<td>Vavlvetrain</td>
-					<td>{{ engine.valvetrain }}</td>
+					<td>{{ engine.getNumberOfCylinders }}-cylinder {{ engine.getConfiguration }} - {{ engine.getValvesPerCylinder }} valves per cylinder</td>
 				</tr>
 				<tr>
 					<td>Displacement</td>
-					<td>{{ engine.displacement }}</td>
+					<td>{{ engine.displacement }}cc (cubic centimeters) with a piston stroke of {{ engine.getPistonStroke }}mm and a cylinder bore of {{ engine.getCylinderBore }}mm</td>
 				</tr>
 				<tr>
-					<td>HorsePower(at rpm)</td>
-					<td>{{ engine.hp }}hp at {{ engine.getMaxHpAtRpm() }}RPM</td>
+					<td>HorsePower</td>
+					<td>{{ engine.hp }}hp</td>
 				</tr>
 				<tr>
-					<td>Torque(at rpm)</td>
-					<td>{{ engine.torque }}Nm at {{ engine.getMaxTorqueAtRpm() }}RPM</td>
+					<td>Torque</td>
+					<td>{{ engine.torque }}Nm</td>
 				</tr>
 				<tr>
 					<td>Redline</td>
 					<td>{{ engine.redline }}RPM</td>
-				</tr>
-				<tr>
-					<td>Avereage Lifespan of the engine(in km)</td>
-					<td>{{ engine.lifespan }}km</td>
 				</tr>
 			</tbody>
 		</table>

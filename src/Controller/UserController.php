@@ -29,8 +29,6 @@
                 $user->setIsadmin(false);
                 $entityManager->persist($user);
                 $entityManager->flush();
-                $flashbag = $this->get('session')->getFlashBag();
-                $flashbag->add("SuccessfullRegistration", "Your registration was successfull!");
                 return $this->redirectToRoute('engine_list_home');
             }
             return $this->render('pages/register_form.html.twig', array(
@@ -44,8 +42,6 @@
         public function logout()
         {
             $this->get('session')->clear();
-            $flashbag = $this->get('session')->getFlashBag();
-            $flashbag->add("SuccessfullLoggout", "You're successfully logged out!");
             return $this->redirectToRoute('engine_list_home');
         }
         /**
@@ -68,8 +64,6 @@
                         );
                 }
                 $this->get('session')->set('id', $user->getId());
-                $flashbag = $this->get('session')->getFlashBag();
-                $flashbag->add("SuccessfullLogin", "You're successfully logged in!");
                 return $this->redirectToRoute('engine_list_home');
             }
             return $this->render('pages/login_form.html.twig', array(

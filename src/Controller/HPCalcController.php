@@ -9,11 +9,13 @@
 	use Doctrine\ORM\EntityManager;
 	use Symfony\Component\Form\Extension\Core\Type\TextType;
 	use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+	use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 	use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 	use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 	use Symfony\Component\Form\Forms;
 	use App\Entity\EngineStock;
 	use App\Entity\User;
+	use App\Entity\Upgrades;
     use App\Form\LoginFormType;
 	use App\Form\RegisterFormType;
     use Symfony\Component\HttpFoundation\Request;
@@ -65,17 +67,16 @@
     		    $form = $this->createFormBuilder($engine)
     		    ->add('manufacturer', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('name', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('production', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('block_alloy', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('configuration', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('valvetrain', TextType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+    		    ->add('block_alloy', ChoiceType::class, ['choices'  => ['Cast Iron (default)' => 'cast iron', 'Aluminium alloy' => 'aluminium alloy'],], array('attr' => array('class' => 'form-control form-control-sm')))
+    		    ->add('configuration', ChoiceType::class, ['choices'  => ['Inline (default)' => 'Inline', 'V-shaped' => 'V-shaped', 'W-shaped' => 'W-shaped'],], array('attr' => array('class' => 'form-control form-control-sm')))    		    
+    		    ->add('piston_stroke', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+    		    ->add('cylinder_bore', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+    		    ->add('number_of_cylinders', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
+    		    ->add('valves_per_cylinder', ChoiceType::class, ['choices'  => ['3 valves per cylinder' => '3', '4 vlves per cylinder (default)' => '4', '5 valves per cylinder' => '5'],], array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('displacement', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('hp', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('max_hp_at_rpm', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('torque', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('max_torque_at_rpm', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('redline', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
-    		    ->add('lifespan', IntegerType::class, array('attr' => array('class' => 'form-control form-control-sm')))
     		    ->add('save', SubmitType::class, array('label' => 'Add Engine', 'attr' => array('class' => 'btn btn-secondary')))
     		    ->getForm();
     		    
@@ -83,6 +84,7 @@
     		    
     		    if($form->isSubmitted() && $form->isValid()){
     		        $engine = $form->getData();
+    		        $engine->setUserStockId($id);
     		        $set_max_hp = $engine->getHp() / 3;
     		        $set_max_hp += $engine->getHp();
     		        $engine->setMaxHpStock($set_max_hp);
@@ -116,7 +118,6 @@
 		    $twojz = new EngineStock();
 		    $twojz->setManufacturer("Toyota");
 		    $twojz->setName("2jz");
-		    $twojz->setProduction("1991-2007");
 		    $twojz->setBlockAlloy("Cast Iron");
 		    $twojz->setConfiguration("Straight-6");
 		    $twojz->setValvetrain("DOHC - 4 valves per cylinder");
@@ -135,4 +136,26 @@
 		    
 		    return $this->redirectToRoute('engine_show', array('id' => $twojz->getId()));
 		}
+		
+		/**
+		 * @Route("/engine/{id}/upgrade", name="engine_upgrade")
+		 * @Method({"GET", "POST"})
+		 */
+		public function upgrade_engine($id){
+		    $user_id = $this->get('session')->get('id');
+		    if($user_id == NULL){
+		        return $this->redirectToRoute('engine_list_home');
+		    }else{
+		    $engine = $this->getDoctrine()->getRepository(EngineStock::class)->find($id);
+		      
+		      
+		    
+		    return $this->render('pages/upgrade.html.twig', array('engine' => $engine));
+		    }
+		}
+		
+		/**
+		 * @Route("/upgraded/engine/{id}", name="engine_upgrade")
+		 * @Method({"GET", "POST"})
+		 */
 	}

@@ -20,7 +20,7 @@
             $user = $this->em->getRepository("App:User")
             ->find($id);
             if($user->getIsAdmin() == true){
-            return true;
+                return true;
             }else{
                 return false;
             }

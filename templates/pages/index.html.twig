@@ -19,7 +19,9 @@
 						<td>{{ engine.name }}</td>
 						<td>
 							<a href="/engine/{{ engine.id }}" class="btn btn-dark">Show</a>
-							<a href="/engine/{{ engine.id }}/upgrade" class="btn btn-dark">Upgrade</a>
+							{% if app.session.has('id') == true %}
+								<a href="/engine/{{ engine.id }}/upgrade" class="btn btn-dark">Upgrade</a>
+							{% endif %}
 						</td>
 					</tr>
 				{% endfor %}
