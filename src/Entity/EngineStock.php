@@ -131,11 +131,11 @@ class EngineStock
         return $this->stockupgrades->remove($stockupgrades);
     }
 
-    public function getUserStockId() : ?int
+    public function getUserStockId() : ?User
     {
         return $this->userstock;
     }
-    public function setUserStockId(?int $userstock)
+    public function setUserStockId(?User $userstock)
     {
         $this->userstock = $userstock;
     }

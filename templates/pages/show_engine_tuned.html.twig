@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HorsePower Calculator{% endblock %}
+
+{% block body %}
+	<p>Upgraded by user: {{ user.getUsername }}
+	<p>Engine Specs:
+	<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Specs Name</th>
+					<th>Stock Engine Specs</th>
+					<th>Tuned Engine Specs</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Manufacturer</td>
+					<td>{{ engine.manufacturer }}</td>
+					<td>{{ tuned.manufacturer }}</td>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td>{{ engine.name }}</td>
+					<td>{{ tuned.name }}</td>
+				</tr>
+				<tr>
+					<td>Engineblock Alloy</td>
+					<td>{{ engine.getBlockAlloy() }}</td>
+					<td>{{ tuned.getBlockAlloy() }}</td>
+				</tr>
+				<tr>
+					<td>Configuration</td>
+					<td>{{ engine.getNumberOfCylinders }}-cylinder {{ engine.getConfiguration }} - {{ engine.getValvesPerCylinder }} valves per cylinder</td>
+					<td>{{ tuned.getNumberOfCylinders }}-cylinder {{ tuned.getConfiguration }} - {{ tuned.getValvesPerCylinder }} valves per cylinder</td>
+				</tr>
+				<tr>
+					<td>Displacement</td>
+					<td>{{ engine.displacement }}cc (cubic centimeters) with a piston stroke of {{ engine.getPistonStroke }}mm and a cylinder bore of {{ engine.getCylinderBore }}mm</td>
+					<td>{{ tuned.displacement }}cc (cubic centimeters) with a piston stroke of {{ tuned.getPistonStroke }}mm and a cylinder bore of {{ tuned.getCylinderBore }}mm</td>
+				</tr>
+				<tr>
+					<td>HorsePower</td>
+					<td>{{ engine.hp }}hp</td>
+					<td>{{ tuned.hp }}hp</td>
+				</tr>
+				<tr>
+					<td>Torque</td>
+					<td>{{ engine.torque }}Nm</td>
+					<td>{{ tuned.torque }}Nm</td>
+				</tr>
+				<tr>
+					<td>Redline</td>
+					<td>{{ engine.redline }}RPM</td>
+					<td>{{ tuned.redline }}RPM</td>
+				</tr>
+			</tbody>
+		</table>
+{% endblock %}

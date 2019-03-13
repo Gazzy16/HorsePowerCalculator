@@ -36,15 +36,15 @@ class EngineTunedRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?EngineTuned
+    public function findAllByUserId($id): ?EngineTuned
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('e.usertuned = :usertuned_id')
+            ->setParameter('usertuned_id', $id)
+            ->orderBy('e.id', 'ASC')
+            ->setMaxResults(100)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

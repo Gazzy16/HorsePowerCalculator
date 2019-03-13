@@ -22,6 +22,11 @@ class Upgrade
     private $forced_induction;
     
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $psi;
+    
+    /**
      * @ORM\Column(type="string", columnDefinition="ENUM('stock', 'street', 'sport', 'deleted')")
      */
     private $intake;
@@ -76,6 +81,18 @@ class Upgrade
     public function setForcedInduction(string $forced_induction): self
     {
         $this->forced_induction = $forced_induction;
+        
+        return $this;
+    }
+    
+    public function getPsi(): ?int
+    {
+        return $this->psi;
+    }
+    
+    public function setPsi(int $psi): self
+    {
+        $this->psi = $psi;
         
         return $this;
     }

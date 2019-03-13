@@ -23,8 +23,8 @@
             $form = $this->createForm(RegisterFormType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $user = $form->getData();
                 $entityManager = $this->getDoctrine()->getManager();
+                $user = $form->getData();
                 $user->setPassword(hash("sha256",$user->getPassword()));
                 $user->setIsadmin(false);
                 $entityManager->persist($user);
@@ -53,11 +53,11 @@
             $form = $this->createForm(LoginFormType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted()) {
-                $guestUser = $form->getData();
-                $guestUser->setPassword(hash("sha256",$guestUser->getPassword()));
+                $guest = $form->getData();
+                $guest->setPassword(hash("sha256",$guest->getPassword()));
                 $user = $this->getDoctrine()
                 ->getRepository(User::class)
-                ->findOneByUsernamePassword($guestUser->getUsername(), $guestUser->getPassword());
+                ->findOneByUsernamePassword($guest->getUsername(), $guest->getPassword());
                 if (!$user) {
                     throw $this->createNotFoundException(
                         'No User found with this email and password!'

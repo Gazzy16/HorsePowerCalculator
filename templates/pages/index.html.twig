@@ -4,6 +4,7 @@
 
 {% block body %}
 	{% if engines %}
+		<p>Stock Engines Table
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -13,7 +14,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for engine in engines %}
+				{% for engine in engines%}
 					<tr>
 						<td>{{ engine.manufacturer }}</td>
 						<td>{{ engine.name }}</td>
@@ -22,6 +23,31 @@
 							{% if app.session.has('id') == true %}
 								<a href="/engine/{{ engine.id }}/upgrade" class="btn btn-dark">Upgrade</a>
 							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<p>No Stock Engines to display.</p>
+	{% endif %}
+	{% if engines %}
+		<p>Upgraded Engines Table
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Engine Manufacturer</th>
+					<th>Engine Name</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for tuned in tuned%}
+					<tr>
+						<td>{{ tuned.manufacturer }}</td>
+						<td>{{ tuned.name }}</td>
+						<td>
+							<a href="/upgraded/engine/{{ tuned.id }}" class="btn btn-dark">Show</a>
 						</td>
 					</tr>
 				{% endfor %}
