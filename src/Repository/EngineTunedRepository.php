@@ -39,8 +39,8 @@ class EngineTunedRepository extends ServiceEntityRepository
     public function findAllByUserId($id): ?EngineTuned
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.usertuned = :usertuned_id')
-            ->setParameter('usertuned_id', $id)
+            ->andWhere('e.usertuned = :usertuned')
+            ->setParameter('usertuned', $id)
             ->orderBy('e.id', 'ASC')
             ->setMaxResults(100)
             ->getQuery()

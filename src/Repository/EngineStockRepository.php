@@ -50,8 +50,8 @@ class EngineStockRepository extends ServiceEntityRepository
     public function findAllByUserId($id): ?EngineStock
     {
         return $this->createQueryBuilder('e')
-        ->andWhere('e.userstock = :userstock_id')
-        ->setParameter('userstock_id', $id)
+        ->andWhere('e.userstock = :userstock')
+        ->setParameter('userstock', $id)
         ->orderBy('e.id', 'ASC')
         ->setMaxResults(100)
         ->getQuery()

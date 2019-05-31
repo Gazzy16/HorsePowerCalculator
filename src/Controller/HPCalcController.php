@@ -56,24 +56,8 @@ use App\Entity\EngineTuned;
 		public function new_engine(Request $request){
 		    $id = $this->get('session')->get('id');
 		    
-		     if($id == NULL){
-		         $user = new User();
-		         $form = $this->createForm(LoginFormType::class, $user);
-		         $form->handleRequest($request);
-		         if ($form->isSubmitted()) {
-		             $guest = $form->getData();
-		             $guest->setPassword(hash("sha256",$guest->getPassword()));
-		             $user = $this->getDoctrine()
-		             ->getRepository(User::class)
-		             ->findOneByUsernamePassword($guest->getUsername(), $guest->getPassword());
-		             if (!$user) {
-		                 throw $this->createNotFoundException(
-		                     'No User found with this email and password!'
-		                     );
-		             }
-		             $this->get('session')->set('id', $user->getId());
-		             return $this->redirectToRoute('new_engine');
-		         }
+		    if($id == NULL){
+		         return $this->redirectToRoute('login');
 		    }else{
 		        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
     		    $engine = new EngineStock();
@@ -156,7 +140,7 @@ use App\Entity\EngineTuned;
 		    if($user_id == NULL){
 		        return $this->redirectToRoute('engine_list_home');
 		    }else{
-		      $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+		      $user = $this->getDoctrine()->getRepository(User::class)->find($user_id);
 		      $engine = $this->getDoctrine()->getRepository(EngineStock::class)->find($id);  
 		      $upgrade = new Upgrade();
 		      
@@ -183,13 +167,48 @@ use App\Entity\EngineTuned;
 		          
 		          $hp = $engine->getHp();
 		          $torque = $engine->getTorque();
+		          $rpm = $engine->getRedline();
+		          $noc = $engine->getNumberOfCylinders();
+		          $bore = $engine->getCylinderBore();
+		          $s = $engine->getPistonStroke();
+		          
+		          $hpstock = $hp;
+		          
+		          //crankshaft angular velocity
+		          $cav = 2*3.14*$rpm;
+		          $cav = $cav/60;
+		          
+		          
+		          //mean piston speed
+		          $mps = 2*$s*$rpm;
+		          $mps = $mps/60;
+		          
+		          
+		          //total bore area
+		          $tba = $noc*3.14*$bore*$bore;
+		          $tba = $tba/4;
+		          
+		          //theoritical volumetric flow rate
+		          $tvfr = $mps*$tba;
+		          $tvfr = $tvfr/4;
+		          
+		          //volumetric efficiency
+		          $ve = 90;
+		          
+		          //volumetric flow rate
+		          $vfr = $ve*$tvfr;
+		          
+		          //brake mean effective differential pressure
+		          $bmep = $hp/$vfr;
 		          
 		          if($upgrade->getForcedInduction() != 'none'){
 		              $psi = $upgrade->getPsi();
-		              for($i = 0; $i < $psi; $i++){
-		                  $hp = $hp + (($hp * 7.4775) / 100);
-		                  $torque = $torque + (($torque * 6.3529) / 100);
-		              }
+		              $k = $psi/14.7;
+		              $k = $k + 1;
+		              $boost = pow($k, 0.588235294);
+		              $ve = $ve*$boost;
+		              $vfr = $ve*$tvfr;
+		              $hp = $bmep*$vfr;
 		          }else{
 		              $psi = 0;
 		          }
@@ -197,17 +216,13 @@ use App\Entity\EngineTuned;
 		          $intake = $upgrade->getIntake();
 		          if($intake == 'street'){
 		              $hp = $hp + 15;
-		              $torque = $torque + 5;
 		          }else if($intake == 'sport'){
 		              $hp = $hp + 35;
-		              $torque = $torque + 25;
 		          }else if($intake == 'deleted'){
 		              $hp = $hp + 55;
-		              $torque = $torque + 35;
 		          }
 		          
 		          $ecu = $upgrade->getEcu();
-		          $rpm = $engine->getRedline();
 		          if($ecu == 'street'){
 		              $rpm = $rpm + 1500;
 		          }else if($ecu == 'sport'){
@@ -219,38 +234,35 @@ use App\Entity\EngineTuned;
 		          $pistons = $upgrade->getPistons();
 		          if($pistons == 'street'){
 		              $hp = $hp + 4;
-		              $torque = $torque + 11;
 		          }else if($pistons == 'sport'){
 		              $hp = $hp + 7;
-		              $torque = $torque + 18;
 		          }else if($pistons == 'type r'){
 		              $hp = $hp + 13;
-		              $torque = $torque + 32;
 		          }
 		          
 		          $intercooler = $upgrade->getIntercooler();
 		          if($intercooler == 'street'){
 		              $hp = $hp + 6;
-		              $torque = $torque + 9;
 		          }else if($intercooler == 'sport'){
 		              $hp = $hp + 11;
-		              $torque = $torque + 13;
 		          }else if($intercooler == 'type r'){
 		              $hp = $hp + 15;
-		              $torque = $torque + 27;
 		          }
 		          
 		          $exhaust = $upgrade->getExhaust();
 		          if($exhaust == 'street'){
 		              $hp = $hp + 16;
-		              $torque = $torque + 8;
 		          }else if($exhaust == 'sport'){
 		              $hp = $hp + 23;
-		              $torque = $torque + 11;
 		          }else if($exhaust == 'type r'){
 		              $hp = $hp + 31;
-		              $torque = $torque + 14;
 		          }
+		          
+		          $peektorquerpm = $hpstock*5252;
+		          $peektorquerpm = $peektorquerpm/$torque;
+		          
+		          $torque = $hp*5252;
+		          $torque = $torque/$peektorquerpm;
 		          
 		          $tuned_engine = new EngineTuned();
 		          
